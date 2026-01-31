@@ -18,11 +18,12 @@ import { socketHandler } from "../socket.js"
 
 const app = express()
 
-// Middleware
+// ================= MIDDLEWARE =================
+
 app.use(cors({
   origin: [
-    "http://localhost:5173",     // local dev
-    "https://your-frontend.vercel.app"  // production frontend
+    "http://localhost:5173",
+    "https://your-frontend.vercel.app"   // change after frontend deploy
   ],
   credentials: true
 }))
@@ -30,17 +31,26 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-// Routes
+// ================= HEALTH CHECK =================
+
+app.get("/health", (req, res) => {
+  res.json({ status: "Backend running fine 🚀" })
+})
+
+// ================= ROUTES =================
+
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/shop", shopRouter)
 app.use("/api/item", itemRouter)
 app.use("/api/order", orderRouter)
 
-// DB connect (important to call once)
+// ================= DATABASE =================
+
 connectDb()
 
-// ---- SOCKET SETUP (works locally, limited on Vercel) ----
+// ================= SOCKET (LOCAL ONLY) =================
+
 const server = http.createServer(app)
 
 const io = new Server(server, {
@@ -56,13 +66,15 @@ const io = new Server(server, {
 app.set("io", io)
 socketHandler(io)
 
-// ---- LOCAL ONLY SERVER ----
+// ================= LOCAL SERVER =================
+
 if (process.env.NODE_ENV !== "production") {
-  const port = process.env.PORT || 5000
-  server.listen(port, () => {
-    console.log(`Server running on ${port}`)
+  const PORT = process.env.PORT || 5000
+  server.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
   })
 }
 
-// ---- REQUIRED FOR VERCEL ----
+// ================= REQUIRED FOR VERCEL =================
+
 export default app

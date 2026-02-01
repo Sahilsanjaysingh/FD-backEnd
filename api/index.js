@@ -15,7 +15,7 @@ dotenv.config()
 
 const app = express()
 
-// ✅ CORS (local + deployed frontend)
+// ✅ middleware
 app.use(cors({
   origin: [
     "http://localhost:5173",
@@ -27,26 +27,20 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-// ✅ Health route
+// ✅ connect DB ONCE
+connectDb()
+
+// ✅ health route
 app.get("/health", (req, res) => {
   res.json({ status: "OK" })
 })
 
-// ✅ API routes
+// ✅ routes
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/shop", shopRouter)
 app.use("/api/item", itemRouter)
 app.use("/api/order", orderRouter)
 
-// ✅ DB connect
-connectDb()
-
-// ✅ Local server (Vercel ignores this)
-const PORT = process.env.PORT || 8000
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on ${PORT}`)
-})
-
-// ✅ Export for Vercel
+// 🚫 DO NOT app.listen on Vercel
 export default app

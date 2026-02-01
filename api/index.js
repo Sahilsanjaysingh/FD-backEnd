@@ -15,11 +15,10 @@ dotenv.config()
 
 const app = express()
 
-// ✅ CORS — Vercel safe + credentials safe
 app.use(cors({
   origin: [
-    "http://localhost:5173",     // local frontend
-    // add frontend vercel url here later if you deploy frontend
+    "http://localhost:5173",
+    "https://fd-front-end.vercel.app"
   ],
   credentials: true
 }))
@@ -27,19 +26,16 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-// ✅ health check (keep this forever)
 app.get("/health", (req, res) => {
   res.json({ status: "OK" })
 })
 
-// ✅ API routes
 app.use("/api/auth", authRouter)
 app.use("/api/user", userRouter)
 app.use("/api/shop", shopRouter)
 app.use("/api/item", itemRouter)
 app.use("/api/order", orderRouter)
 
-// ✅ DB connect once
 connectDb()
 
 export default app

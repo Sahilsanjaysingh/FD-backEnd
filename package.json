@@ -1,12 +1,13 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "type": "module",
+  "description": "Food delivery backend API",
+  "main": "api/index.js",
   "scripts": {
-  "start": "node api/index.js",
-  "dev": "nodemon api/index.js"
-},
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
   "author": "Virtual code",
   "license": "ISC",
   "dependencies": {
@@ -15,13 +16,15 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
-    "express": "^5.1.0",
+    "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.17.2",
     "multer": "^2.0.2",
     "nodemailer": "^7.0.5",
-    "nodemon": "^3.1.10",
     "razorpay": "^2.9.6",
     "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
